@@ -1,0 +1,748 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Yellow Unit — R. Evergarden</title>
+<meta name="description" content="Inspection copy of a wrist unit built from scrap by Rhada Evergarden. Notes incomplete.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--y:#ffcf3a;--ink:#e8e0c8;--dim:#8a836f;--line:rgba(255,207,58,.32);--panel:rgba(14,12,9,.82)}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:#090806;color:var(--ink);font:14px/1.45 'Share Tech Mono',ui-monospace,Consolas,monospace}
+#stage{position:fixed;inset:0;background:
+  linear-gradient(rgba(255,207,58,.03) 1px,transparent 1px) 0 0/44px 44px,
+  linear-gradient(90deg,rgba(255,207,58,.03) 1px,transparent 1px) 0 0/44px 44px,
+  radial-gradient(ellipse at 38% 50%,#2b2418 0%,#13110c 50%,#070605 100%)}
+#stage canvas{display:block;touch-action:none}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:50;background:repeating-linear-gradient(0deg,rgba(0,0,0,.16) 0 1px,transparent 1px 3px);animation:flick 7s infinite steps(1)}
+@keyframes flick{0%,100%{opacity:1}41%{opacity:.6}42%{opacity:1}77%{opacity:.75}77.6%{opacity:1}}
+@keyframes blink{0%{opacity:.15}40%{opacity:1}60%{opacity:.45}100%{opacity:1}}
+header{position:fixed;left:22px;top:18px;z-index:5;pointer-events:none}
+.sig{font:700 27px/1 Caveat,cursive;color:var(--y);transform:rotate(-2deg);text-shadow:0 0 12px rgba(255,174,0,.45)}
+h1{margin:6px 0 0;font-size:19px;letter-spacing:.18em;text-transform:uppercase;font-weight:400}
+h1 span{color:var(--dim)}
+.sub{margin:2px 0 0;color:var(--dim);font-size:12px;letter-spacing:.08em}
+#panel{position:fixed;right:18px;top:18px;bottom:86px;width:340px;z-index:5;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--y);backdrop-filter:blur(6px);padding:18px 18px 16px;overflow:auto;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+#info.blink{animation:blink .3s steps(3)}
+.code{color:var(--y);font-size:12px;letter-spacing:.2em}
+#info h2{margin:2px 0 12px;font-size:22px;font-weight:400;letter-spacing:.06em}
+#info h3{margin:18px 0 6px;font-size:11px;font-weight:400;color:var(--dim);letter-spacing:.2em;text-transform:uppercase;border-bottom:1px dashed var(--line);padding-bottom:4px}
+dl{display:grid;grid-template-columns:92px 1fr;gap:6px 10px;margin:0}
+dt{color:var(--dim);font-size:11px;letter-spacing:.12em;text-transform:uppercase;padding-top:2px}
+dd{margin:0}
+.dim{color:var(--dim)}
+.note{font:500 23px/1.1 Caveat,cursive;color:#efdfae;margin:16px 0 4px;transform:rotate(-.6deg)}
+.redact{background:var(--ink);border-radius:1px;user-select:none;opacity:.85}
+s{color:var(--dim)}
+.ask{margin:14px 0 0;padding-top:10px;border-top:1px dashed var(--line);color:var(--y);font-size:12px;letter-spacing:.04em}
+.log{list-style:none;padding:0;margin:0;display:grid;gap:4px;font-size:13px}
+.log b{color:var(--y);font-weight:400;margin-right:8px}
+.schem{width:100%;height:auto;color:var(--y);display:block}
+.schem text{font:12px 'Share Tech Mono',monospace;fill:var(--y)}
+.schem .hand{font:18px Caveat,cursive;fill:#efdfae}
+.act{display:flex;gap:8px;margin-top:16px}
+button{font:inherit;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);background:rgba(20,17,12,.85);border:1px solid var(--line);padding:8px 12px;cursor:pointer;transition:background .15s,color .15s,border-color .15s}
+button:hover{border-color:var(--y);color:var(--y)}
+button.on{background:var(--y);color:#15120c;border-color:var(--y)}
+button:focus-visible{outline:2px solid var(--y);outline-offset:2px}
+#bar{position:fixed;left:calc((100vw - 376px)/2);bottom:20px;transform:translateX(-50%);display:flex;gap:6px;z-index:6}
+#hint{position:fixed;left:22px;bottom:26px;color:var(--dim);font-size:11px;letter-spacing:.12em;z-index:5;pointer-events:none}
+#tip{position:fixed;z-index:20;pointer-events:none;font-size:11px;letter-spacing:.1em;color:#15120c;background:var(--y);padding:2px 6px;transform:translate(14px,-50%);display:none;white-space:nowrap}
+.tag{pointer-events:auto;cursor:pointer;font-size:10.5px;letter-spacing:.08em;color:var(--y);background:rgba(10,9,7,.72);border:1px solid var(--line);padding:1px 6px;white-space:nowrap;text-shadow:0 0 6px rgba(255,174,0,.5);animation:flick 5s infinite steps(1)}
+.tag b{font-weight:400;opacity:.6;margin-right:5px}
+.tag:hover,.tag.sel{background:var(--y);color:#15120c;text-shadow:none}
+#loading{position:fixed;inset:0;display:grid;place-items:center;z-index:60;background:#090806;color:var(--y);letter-spacing:.3em;font-size:12px;transition:opacity .6s}
+#loading.done{opacity:0;pointer-events:none}
+@media (max-width:760px){
+  header{left:14px;top:12px}
+  .sig{font-size:22px} h1{font-size:14px} .sub{display:none}
+  #panel{left:10px;right:10px;top:auto;bottom:84px;width:auto;max-height:36vh;padding:14px}
+  #bar{left:10px;right:10px;bottom:10px;transform:none;display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+  #bar button{padding:7px 4px;font-size:11px;letter-spacing:.08em}
+  #hint{display:none}
+}
+</style>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<div id="stage"></div>
+<header>
+  <div class="sig">Rhada Evergarden</div>
+  <h1>Yellow Unit <span>/ scrap</span></h1>
+  <p class="sub">inspection copy · notes incomplete</p>
+</header>
+<aside id="panel" aria-live="polite"><div id="info"></div></aside>
+<nav id="bar" aria-label="view controls">
+  <button data-act="rotate">rotate</button>
+  <button data-act="internals">internals</button>
+  <button data-act="separate">separate</button>
+  <button data-act="labels">labels</button>
+  <button data-act="hud">hud</button>
+  <button data-act="reset">reset</button>
+</nav>
+<div id="hint">drag to turn · scroll to zoom · click a part</div>
+<div id="tip"></div>
+<div id="loading">WARMING UP…</div>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+const TAU = Math.PI * 2;
+let seed = 1337; // seeded so the wear looks the same every visit
+function rand() { seed = (seed + 0x6D2B79F5) | 0; let t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }
+const rnd = (a, b) => a + rand() * (b - a);
+const V = (x, y, z) => new THREE.Vector3(x, y, z);
+
+// ---------- notes (deliberately incomplete)
+const red = n => `<span class="redact" title="redacted">${'&nbsp;'.repeat(n)}</span>`;
+const INFO = {
+  housing: { code: 'C-01', name: 'Housing', tag: 'housing', mat: 'pressed steel · yellow enamel, 3 coats <span class="dim">(3 different cans)</span>', src: 'fuel drum lid, probably', build: 'hammered round over a pipe. seam at 7.', note: 'cracked at four. patched. runs warm on the left side and I haven’t decided if that’s a problem.', ask: 'why the left side.' },
+  patch: { code: 'C-02', name: 'Patch plate', tag: 'patch', mat: 'galvanized sheet', src: '—', build: 'four rivets. rivet 3 is a screw.', note: 'covers the crack. covers <s>something else</s> the crack.', ask: 'covers what else.' },
+  bezel: { code: 'C-03', name: 'Bezel', tag: 'bezel', mat: 'brass', src: 'compression fitting, cut down', build: 'marks filed by hand. spacing uneven.', note: 'turns one way. the marks aren’t hours.', ask: 'then what are they.' },
+  screws: { code: 'C-04', name: 'Fasteners', tag: 'screws 11/12', mat: 'steel, brass · mixed heads', src: 'the jar', build: 'flat, cross, one hex. 11 of 12.', note: 'twelfth hole is empty. closes fine without it.' },
+  lens: { code: 'C-05', name: 'Lens', tag: 'lens', mat: 'mineral glass <span class="dim">(probably)</span>', src: 'storm lantern', build: 'pressed in. no gasket.', note: 'the crack was there before. kept it.' },
+  dial: { code: 'C-06', name: 'Dial', tag: 'dial', mat: 'tinplate · paint · ink', src: 'same tin as C-15', build: 'numerals in three different hands. no 12.', note: 'twelve isn’t missing.', ask: 'where it is, then.' },
+  hands: { code: 'C-07', name: 'Hands', tag: 'hands', mat: 'sheet steel · sewing needle · wire', src: 'various', build: 'hour: filed. minute: a needle, bent back straight-ish. second: wire.', note: 'second hand catches at 40. <s>fix</s> leave it.' },
+  gears: { code: 'C-08', name: 'Gear train', tag: 'gears', mat: 'brass · steel · copper', src: `music box, gas meter, ${red(9)}`, build: 'tooth counts don’t agree with each other. keeps time anyway.', note: 'the copper one stays in. don’t take it out.', ask: 'where the copper one came from.' },
+  coil: { code: 'C-09', name: 'Coil', tag: 'coil', mat: 'enamelled copper · iron nail core', src: 'dead motor', pwr: '?', build: 'hand-wound. lost count around 300 turns.', note: 'hums when the HUD is on. sometimes when it isn’t.', ask: 'what it’s for.' },
+  cell: { code: 'C-10', name: 'Cell', tag: 'cell', mat: '—', src: red(10), pwr: 'HUD says 61%. the meter says something else.', build: 'taped. twice.', note: 'doesn’t drain like it should.', ask: 'how long it lasts.' },
+  board: { code: 'C-11', name: 'Logic board', tag: 'board', mat: 'fibreglass · copper · silver ink', src: 'salvaged. half the traces scraped off.', pwr: 'C-10 → here → C-13', build: 'scraped half redrawn by hand.', note: 'the new half isn’t a copy of the old half.', ask: 'what it does now.' },
+  wiring: { code: 'C-12', name: 'Wiring', tag: 'wiring', mat: 'copper · PVC · tape', src: 'everywhere', build: `red: cell. yellow: emitter. black: ${red(12)}`, note: 'runs outside the case on purpose.' },
+  emitter: { code: 'C-13', name: 'Emitter', tag: 'emitter', mat: 'diode · bike-lamp lens · can metal', src: 'bicycle lamp', pwr: 'via C-11', build: 'tilted about 11°. shimmed with a coin.', note: 'projects the HUD. the flicker isn’t the diode.', ask: 'then what is it.' },
+  crown: { code: 'C-14', name: 'Crown', tag: 'crown', mat: 'steel', src: 'M5 hex bolt', build: `pull: set. push: wind. twist both ways: ${red(6)}` },
+  back: { code: 'C-15', name: 'Caseback', tag: 'back', mat: 'tinplate', src: 'tin of peaches. label still on the inside.', build: 'friction fit. pry slot at 6.', note: 'something’s scratched on the inside. it isn’t my name.', ask: 'whose.' },
+  strapA: { code: 'C-16', name: 'Strap, 6 side', tag: 'strap', mat: 'tyre rubber', src: 'bicycle, rear tyre', build: 'cut to width, stitched with wire.', note: 'rubs. everyone says it rubs.' },
+  strapB: { code: 'C-17', name: 'Strap, 12 side', tag: 'chain', mat: 'chain links', src: 'same bicycle', build: 'pins pressed out and back in by hand.' },
+  hud: { code: 'C-??', name: 'HUD', tag: 'HUD', mat: 'light', src: 'C-13', build: 'reads: time · cell · L° · SYNC', note: 'SYNC doesn’t sync to anything. yet.', ask: 'to what.' },
+};
+const LOG = [['d.01', 'drum lid, hammered round. seam at 7.'], ['d.03', 'gears from three different things. they argue.'], ['d.04', '<s>scrapped the board</s> redrew the board.'], ['d.06', 'first tick.'], ['d.09', `HUD on. ${red(16)}`], ['d.??', 'it was on when I woke up.']];
+const SCHEM = `<svg class="schem" viewBox="0 0 300 160" role="img" aria-label="rough wiring sketch, unfinished">
+<g fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round">
+<rect x="14" y="62" width="54" height="30" rx="3"/><path d="M68 76c18-3 30 4 50-1"/>
+<rect x="118" y="54" width="66" height="44"/><path d="M184 66c16-6 28-14 40-20"/>
+<circle cx="240" cy="40" r="16"/><path d="M232 32l16 16M248 32l-16 16" stroke-width=".8" opacity=".6"/>
+<path d="M151 98c-2 10 3 14 0 22"/><path d="M131 128q5-10 10 0t10 0 10 0 10 0"/>
+<path d="M184 88c22 6 36 14 52 24" stroke-dasharray="4 5"/>
+<path d="M41 62c2-14 10-26 24-34" stroke-dasharray="2 4" opacity=".7"/>
+<path d="M196 146h40" stroke-width="1.2"/>
+</g>
+<text x="22" y="81">CELL</text><text x="131" y="80">C-11</text><text x="225" y="70">LENS</text><text x="136" y="150">coil</text>
+<text class="hand" x="242" y="126">?</text><text class="hand" x="64" y="24">…</text>
+<text class="hand" x="194" y="58" transform="rotate(-24 194 58)">11°?</text>
+<text x="200" y="150" opacity=".6">SYNC</text>
+</svg>`;
+
+// ---------- renderer / scene
+try { await Promise.race([Promise.all(['500 40px Caveat', '700 40px Caveat', '40px "Share Tech Mono"'].map(f => document.fonts.load(f))), new Promise(r => setTimeout(r, 2500))]); } catch (e) { /* fall back to system fonts */ }
+
+const stage = document.getElementById('stage');
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+stage.appendChild(renderer.domElement);
+const labelRenderer = new CSS2DRenderer();
+labelRenderer.domElement.style.cssText = 'position:absolute;inset:0;pointer-events:none';
+stage.appendChild(labelRenderer.domElement);
+
+const scene = new THREE.Scene();
+scene.environment = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), 0.04).texture;
+const camera = new THREE.PerspectiveCamera(35, 1, 0.1, 100);
+const HOME = V(6.9, 5.9, 8.8), TGT = V(0, 0.7, 0);
+camera.position.copy(HOME);
+const controls = new OrbitControls(camera, renderer.domElement);
+Object.assign(controls, { enableDamping: true, enablePan: false, minDistance: 3.5, maxDistance: 16, autoRotate: true, autoRotateSpeed: 0.5 });
+controls.target.copy(TGT);
+
+scene.add(new THREE.HemisphereLight(0xfff1d6, 0x1a140c, 0.35));
+const sun = new THREE.DirectionalLight(0xffe6c0, 1.6); sun.position.set(4, 6, 3); scene.add(sun);
+const rim = new THREE.DirectionalLight(0x9fb4ff, 0.6); rim.position.set(-5, 2, -4); scene.add(rim);
+const hudLight = new THREE.PointLight(0xffc23a, 6, 6, 2); hudLight.position.set(0, 2.2, 0); scene.add(hudLight);
+
+// ---------- canvas textures
+function tex(w, h, draw) {
+  const c = document.createElement('canvas'); c.width = w; c.height = h;
+  draw(c.getContext('2d'), w, h);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8;
+  return t;
+}
+function speckle(g, w, h, n, dark = 0.06, light = 0.05) {
+  for (let i = 0; i < n; i++) { g.fillStyle = rand() < 0.5 ? `rgba(0,0,0,${dark})` : `rgba(255,245,215,${light})`; g.fillRect(rnd(0, w), rnd(0, h), rnd(1, 3), rnd(1, 3)); }
+}
+function blob(g, x, y, r, sy = 1) {
+  g.beginPath();
+  for (let k = 0; k < 10; k++) { const a = k / 10 * TAU, rr = r * rnd(0.5, 1.2); g.lineTo(x + Math.cos(a) * rr, y + Math.sin(a) * rr * sy); }
+  g.closePath();
+}
+function crack(g, x, y, ang, len, w = 2, depth = 0) {
+  const base = ang;
+  g.lineWidth = w; g.beginPath(); g.moveTo(x, y);
+  for (let i = 0, n = Math.ceil(len / 12); i < n; i++) {
+    ang += rnd(-0.4, 0.4) + (base - ang) * 0.3;
+    x += Math.cos(ang) * 12; y += Math.sin(ang) * 12; g.lineTo(x, y);
+    if (depth < 2 && rand() < 0.12) { g.stroke(); crack(g, x, y, ang + rnd(-1, 1), len * 0.35, w * 0.6, depth + 1); g.lineWidth = w; g.beginPath(); g.moveTo(x, y); }
+  }
+  g.stroke();
+}
+
+const paintTex = tex(1024, 256, (g, w, h) => {
+  g.fillStyle = '#c4951c'; g.fillRect(0, 0, w, h);
+  g.fillStyle = '#dcae36'; g.fillRect(w * 0.24, 0, w * 0.3, h); // second can
+  g.fillStyle = '#cf9f22'; g.fillRect(w * 0.7, 0, w * 0.14, h); // third can
+  speckle(g, w, h, 9000);
+  for (let i = 0; i < 80; i++) { blob(g, rnd(0, w), rnd(0, h), rnd(2, 13), 0.7); g.fillStyle = '#5f5b54'; g.fill(); g.strokeStyle = 'rgba(70,45,10,.6)'; g.lineWidth = 1; g.stroke(); }
+  for (let i = 0; i < 45; i++) { const x = rnd(0, w), y = rnd(h * 0.55, h), r = rnd(4, 20), gr = g.createRadialGradient(x, y, 0, x, y, r); gr.addColorStop(0, 'rgba(105,45,12,.75)'); gr.addColorStop(1, 'rgba(105,45,12,0)'); g.fillStyle = gr; g.fillRect(x - r, y - r, r * 2, r * 2); }
+  g.strokeStyle = 'rgba(255,244,205,.32)';
+  for (let i = 0; i < 140; i++) { g.lineWidth = rnd(0.5, 1.3); const x = rnd(0, w), y = rnd(0, h); g.beginPath(); g.moveTo(x, y); g.lineTo(x + rnd(-45, 45), y + rnd(-6, 6)); g.stroke(); }
+  g.strokeStyle = 'rgba(18,10,3,.95)'; crack(g, w * 0.2, 0, Math.PI / 2, h * 1.2, 3); // runs out from under the patch
+});
+const galvTex = tex(256, 256, (g, w, h) => {
+  g.fillStyle = '#9a9d99'; g.fillRect(0, 0, w, h);
+  for (let i = 0; i < 60; i++) { blob(g, rnd(0, w), rnd(0, h), rnd(10, 30)); const v = Math.round(rnd(130, 185)); g.fillStyle = `rgba(${v},${v + 2},${v},.5)`; g.fill(); }
+  speckle(g, w, h, 1500);
+});
+const dialTex = tex(1024, 1024, (g, w) => {
+  const c = w / 2;
+  g.fillStyle = '#c4b283'; g.fillRect(0, 0, w, w);
+  for (let i = 0; i < 25; i++) { const x = rnd(0, w), y = rnd(0, w), r = rnd(30, 160), gr = g.createRadialGradient(x, y, 0, x, y, r); gr.addColorStop(0, `rgba(90,60,20,${rnd(0.05, 0.18)})`); gr.addColorStop(1, 'rgba(90,60,20,0)'); g.fillStyle = gr; g.fillRect(x - r, y - r, r * 2, r * 2); }
+  for (let r = 20; r < c; r += 2.5) { g.strokeStyle = `rgba(255,250,230,${rnd(0, 0.07)})`; g.lineWidth = 1; g.beginPath(); g.arc(c, c, r, 0, TAU); g.stroke(); }
+  g.save(); g.translate(c, c); g.rotate(-0.5); g.fillStyle = 'rgba(150,40,30,.13)'; g.font = 'bold 120px Georgia, serif'; g.textAlign = 'center'; g.fillText('…ET WT', 30, 260); g.restore();
+  g.strokeStyle = '#2b2116'; g.lineCap = 'round';
+  for (let i = 1; i < 60; i++) { // no mark at 12
+    const a = i / 60 * TAU + rnd(-0.014, 0.014), big = i % 5 === 0, r0 = c * 0.94, r1 = c * (big ? rnd(0.78, 0.82) : rnd(0.88, 0.9));
+    g.lineWidth = big ? rnd(7, 10) : rnd(2, 3.5);
+    g.beginPath(); g.moveTo(c + Math.sin(a) * r0, c - Math.cos(a) * r0); g.lineTo(c + Math.sin(a) * r1, c - Math.cos(a) * r1); g.stroke();
+  }
+  const num = (s, ang, font, rot = 0) => { g.save(); g.translate(c + Math.sin(ang) * c * 0.64, c - Math.cos(ang) * c * 0.64); g.rotate(rot); g.font = font; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillStyle = '#231a10'; g.fillText(s, 0, 0); g.restore(); };
+  num('3', Math.PI / 2, '600 120px Georgia, serif');
+  num('6', Math.PI, '700 150px Caveat, cursive', 0.12);
+  num('9', Math.PI * 1.5, '110px "Share Tech Mono", monospace', -0.05);
+  g.fillStyle = 'rgba(40,28,14,.55)'; g.font = '500 46px Caveat, cursive'; g.textAlign = 'center'; g.fillText('R.E.', c + 10, c + 215);
+  const x0 = c - 0.85 * c * 0.98, y0 = c + 0.49 * c * 0.98;
+  g.strokeStyle = '#1b140b'; crack(g, x0, y0, Math.atan2(c - y0, c - x0), c * 0.55, 3);
+  g.fillStyle = '#120d08'; g.beginPath(); g.arc(c, c, 18, 0, TAU); g.fill();
+});
+const crackTex = tex(512, 512, g => {
+  const x = 360, y = 150; g.strokeStyle = 'rgba(235,245,255,.6)';
+  for (let i = 0; i < 8; i++) crack(g, x, y, i / 8 * TAU + rnd(-0.3, 0.3), rnd(70, 300), 1.6);
+  g.lineWidth = 1;
+  [26, 58].forEach(r => { g.beginPath(); for (let a = 0; a < TAU * 0.8; a += 0.35) { const rr = r * rnd(0.85, 1.15); g.lineTo(x + Math.cos(a) * rr, y + Math.sin(a) * rr); } g.stroke(); });
+  g.fillStyle = 'rgba(255,255,255,.7)'; g.beginPath(); g.arc(x, y, 4, 0, TAU); g.fill();
+});
+const boardTex = tex(256, 256, (g, w, h) => {
+  g.fillStyle = '#1e3d2a'; g.fillRect(0, 0, w, h);
+  g.lineWidth = 3; g.strokeStyle = '#b8894a'; g.fillStyle = '#d4a960';
+  for (let i = 0; i < 22; i++) { let x = rnd(0, w * 0.55), y = rnd(0, h); g.beginPath(); g.moveTo(x, y); for (let k = 0; k < 3; k++) { if (rand() < 0.5) x = rnd(0, w * 0.55); else y = rnd(0, h); g.lineTo(x, y); } g.stroke(); g.fillRect(x - 4, y - 4, 8, 8); }
+  g.fillStyle = '#56664f'; g.fillRect(w * 0.55, 0, w * 0.45, h); speckle(g, w, h, 1200, 0.15, 0.08);
+  g.strokeStyle = '#d9dce0'; g.lineWidth = 2.6; g.lineCap = 'round';
+  for (let i = 0; i < 8; i++) { let x = w * 0.55 + rnd(0, 20), y = rnd(10, h - 10); g.beginPath(); g.moveTo(x, y); while (x < w - 10) { x += rnd(8, 20); y += rnd(-10, 10); g.lineTo(x, y); } g.stroke(); }
+  g.fillStyle = '#e9e3c9'; g.font = '14px "Share Tech Mono", monospace'; g.fillText('REV ?', 8, h - 10);
+});
+const backInTex = tex(512, 512, (g, w) => {
+  g.fillStyle = '#a5a7a4'; g.fillRect(0, 0, w, w); speckle(g, w, w, 3000);
+  g.save(); g.translate(w / 2, w / 2 - 30); g.rotate(0.32);
+  g.fillStyle = '#a8302a'; g.fillRect(-320, -70, 640, 150);
+  g.fillStyle = '#efe3c2'; g.textAlign = 'center'; g.font = 'bold 84px Georgia, serif'; g.fillText('…ACHES', -20, 18);
+  g.font = 'italic 30px Georgia, serif'; g.fillText('in light syr…', 10, 62);
+  g.restore();
+  for (let i = 0; i < 16; i++) { blob(g, rnd(0, w), rnd(80, 260), rnd(10, 40)); g.fillStyle = '#a5a7a4'; g.fill(); }
+  g.strokeStyle = 'rgba(35,35,35,.8)'; g.lineWidth = 2.2; // not her name
+  let x = 150;
+  for (let i = 0; i < 7; i++) { g.beginPath(); g.moveTo(x, 390 + rnd(-8, 8)); for (let k = 0; k < 3; k++) g.lineTo(x + rnd(-6, 24), 390 + rnd(-26, 22)); g.stroke(); x += rnd(22, 34); }
+});
+const backOutTex = tex(512, 512, (g, w) => {
+  const c = w / 2; g.fillStyle = '#8f9295'; g.fillRect(0, 0, w, w);
+  for (let r = 4; r < c; r += 1.5) { g.strokeStyle = `rgba(${rand() < 0.5 ? '0,0,0' : '255,255,255'},${rnd(0.02, 0.08)})`; g.beginPath(); g.arc(c, c, r, 0, TAU); g.stroke(); }
+  g.fillStyle = 'rgba(30,30,30,.75)'; g.textAlign = 'center';
+  g.font = '700 54px Caveat, cursive'; g.fillText('U-01', c, c - 10);
+  g.font = '28px "Share Tech Mono", monospace'; g.fillText('DO NOT', c, c + 40);
+});
+const shadowTex = tex(256, 256, (g, w) => { const gr = g.createRadialGradient(w / 2, w / 2, 0, w / 2, w / 2, w / 2); gr.addColorStop(0, 'rgba(0,0,0,.6)'); gr.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = gr; g.fillRect(0, 0, w, w); });
+const ringTexA = tex(512, 512, (g, w) => {
+  const c = w / 2; g.strokeStyle = g.fillStyle = '#ffcf3a'; g.shadowColor = '#ffae00'; g.shadowBlur = 8; g.lineWidth = 3;
+  [[0.15, 1.7], [2.05, 3.9], [4.3, 5.1], [5.35, 6.05]].forEach(([a, b]) => { g.beginPath(); g.arc(c, c, c * 0.95, a, b); g.stroke(); });
+  for (let i = 0; i < 120; i++) { if (rand() < 0.12) continue; const a = i / 120 * TAU, big = i % 10 === 0, r0 = c * 0.9, r1 = r0 - (big ? 22 : 8); g.lineWidth = big ? 2.5 : 1.2; g.beginPath(); g.moveTo(c + Math.cos(a) * r0, c + Math.sin(a) * r0); g.lineTo(c + Math.cos(a) * r1, c + Math.sin(a) * r1); g.stroke(); }
+  g.lineWidth = 1.2; g.setLineDash([5, 9]); g.beginPath(); g.arc(c, c, c * 0.7, 0, TAU); g.stroke(); g.setLineDash([]);
+  g.font = '18px "Share Tech Mono", monospace'; g.textAlign = 'center';
+  ['00', '15', '30', '??'].forEach((s, i) => { const a = i * Math.PI / 2 - Math.PI / 2; g.fillText(s, c + Math.cos(a) * c * 0.78, c + Math.sin(a) * c * 0.78 + 6); });
+});
+const ringTexB = tex(512, 512, (g, w) => {
+  const c = w / 2, s = -Math.PI / 2, e = s + 0.61 * TAU;
+  g.strokeStyle = g.fillStyle = '#ffcf3a'; g.shadowColor = '#ffae00'; g.shadowBlur = 10;
+  g.lineWidth = 16; g.globalAlpha = 0.85; g.beginPath(); g.arc(c, c, c * 0.82, s, e); g.stroke();
+  g.globalAlpha = 0.22; g.beginPath(); g.arc(c, c, c * 0.82, e, s + TAU); g.stroke(); g.globalAlpha = 1;
+  g.lineWidth = 2; g.beginPath(); g.arc(c, c, c * 0.62, 0, TAU); g.stroke();
+  g.lineWidth = 1.5; [[c, c * 0.3, c, c * 0.52], [c, c * 1.48, c, c * 1.7], [c * 0.3, c, c * 0.52, c], [c * 1.48, c, c * 1.7, c]].forEach(([a, b, d, f]) => { g.beginPath(); g.moveTo(a, b); g.lineTo(d, f); g.stroke(); });
+  for (let i = 0; i < 24; i++) { if (i % 5 === 3) continue; g.save(); g.translate(c, c); g.rotate(i / 24 * TAU); g.fillRect(c * 0.66, -3, 10, 6); g.restore(); }
+});
+
+// ---------- materials
+const M = o => new THREE.MeshStandardMaterial({ envMapIntensity: 0.55, ...o });
+const brass = M({ color: 0xa8843a, metalness: 0.9, roughness: 0.4 });
+const steel = M({ color: 0x8b8e91, metalness: 0.85, roughness: 0.42 });
+const dark = M({ color: 0x3d3e40, metalness: 0.8, roughness: 0.55 });
+const copper = M({ color: 0xb0603a, metalness: 0.9, roughness: 0.34 });
+const rubber = M({ color: 0x1b1a19, roughness: 0.95 });
+const tapeMat = M({ color: 0xb9b19c, roughness: 0.9, side: THREE.DoubleSide });
+const black = M({ color: 0x0e0e0e, roughness: 0.7 });
+const ledMat = M({ color: 0x332200, emissive: 0xffc23a, emissiveIntensity: 2 });
+const lensMat = M({ color: 0x2a2000, emissive: 0xffcf3a, emissiveIntensity: 3, roughness: 0.2 });
+const yWireMat = M({ color: 0xd9a81e, roughness: 0.5, emissive: 0x6a4500, emissiveIntensity: 0.5 });
+
+// ---------- geometry helpers
+const mesh = (geo, mat, x = 0, y = 0, z = 0) => { const m = new THREE.Mesh(geo, mat); m.position.set(x, y, z); return m; };
+const clockPos = (deg, r, y) => { const a = THREE.MathUtils.degToRad(deg); return V(Math.sin(a) * r, y, -Math.cos(a) * r); };
+function gearGeo(r, teeth, depth, hole, spokes) {
+  const s = new THREE.Shape(), td = Math.min(0.05, r * 0.14), step = TAU / teeth;
+  for (let i = 0; i < teeth; i++) {
+    const a0 = i * step;
+    [[a0, r - td], [a0 + step * 0.15, r], [a0 + step * 0.45, r], [a0 + step * 0.6, r - td]].forEach(([a, rr], j) => {
+      const x = Math.cos(a) * rr, y = Math.sin(a) * rr; i === 0 && j === 0 ? s.moveTo(x, y) : s.lineTo(x, y);
+    });
+  }
+  s.closePath();
+  const h = new THREE.Path(); h.absarc(0, 0, hole, 0, TAU, true); s.holes.push(h);
+  for (let k = 0; k < spokes; k++) {
+    const a1 = k / spokes * TAU + 0.18, a2 = (k + 1) / spokes * TAU - 0.18, ri = r * 0.32, ro = r * 0.7, p = new THREE.Path();
+    p.moveTo(Math.cos(a1) * ri, Math.sin(a1) * ri); p.absarc(0, 0, ro, a1, a2, false); p.lineTo(Math.cos(a2) * ri, Math.sin(a2) * ri); p.absarc(0, 0, ri, a2, a1, true);
+    s.holes.push(p);
+  }
+  const g = new THREE.ExtrudeGeometry(s, { depth, bevelEnabled: false, curveSegments: 6 });
+  g.rotateX(-Math.PI / 2);
+  return g;
+}
+class Helix extends THREE.Curve {
+  constructor(r, len, turns) { super(); this.r = r; this.len = len; this.turns = turns; }
+  getPoint(t, out = new THREE.Vector3()) { const a = t * this.turns * TAU; return out.set((t - 0.5) * this.len, Math.cos(a) * this.r, Math.sin(a) * this.r); }
+}
+
+// ---------- parts
+const watch = new THREE.Group(); scene.add(watch);
+const parts = {}, pickables = [], shellMats = [], hudMats = [], hudSprites = [], pulled = new Set();
+let gears, hands, emitterLens, hudRingA, hudRingB;
+
+function buildHousing() {
+  const g = new THREE.Group();
+  const prof = [[1.36, -0.27], [1.58, -0.28], [1.66, -0.22], [1.7, -0.1], [1.71, 0.04], [1.69, 0.18], [1.62, 0.29], [1.5, 0.31], [1.36, 0.3], [1.36, -0.27]].map(([x, y]) => new THREE.Vector2(x, y));
+  g.add(new THREE.Mesh(new THREE.LatheGeometry(prof, 120), M({ map: paintTex, metalness: 0.25, roughness: 0.62, side: THREE.DoubleSide })));
+  const bead = new THREE.SphereGeometry(0.024, 8, 6); // weld seam at 7
+  for (let i = 0; i < 9; i++) { const p = clockPos(210 + rnd(-1.5, 1.5), 1.705, -0.19 + i * 0.045); g.add(mesh(bead, dark, p.x, p.y, p.z)); }
+  const grom = mesh(new THREE.TorusGeometry(0.05, 0.018, 8, 16), rubber, -1.705, 0.02, 0.12); grom.rotation.y = Math.PI / 2; g.add(grom);
+  return g;
+}
+function buildPatch() {
+  const g = new THREE.Group(), t0 = THREE.MathUtils.degToRad(28), tl = THREE.MathUtils.degToRad(40);
+  g.add(new THREE.Mesh(new THREE.CylinderGeometry(1.722, 1.722, 0.34, 16, 1, true, t0, tl), M({ map: galvTex, metalness: 0.75, roughness: 0.5, side: THREE.DoubleSide })));
+  [[t0 + 0.08, 0.12], [t0 + tl - 0.08, 0.12], [t0 + tl - 0.08, -0.12], [t0 + 0.08, -0.12]].forEach(([a, y], i) => {
+    const out = V(Math.sin(a), 0, Math.cos(a));
+    if (i === 2) { // rivet 3 is a screw
+      const s = mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.02, 12), dark, out.x * 1.735, y, out.z * 1.735);
+      s.quaternion.setFromUnitVectors(V(0, 1, 0), out); s.add(mesh(new THREE.BoxGeometry(0.055, 0.012, 0.01), black, 0, 0.008, 0)); g.add(s);
+    } else g.add(mesh(new THREE.SphereGeometry(0.03, 10, 8), steel, out.x * 1.725, y, out.z * 1.725));
+  });
+  return g;
+}
+function buildBezel() {
+  const g = new THREE.Group();
+  const t = mesh(new THREE.TorusGeometry(1.47, 0.09, 14, 96), brass, 0, 0.36, 0); t.rotation.x = Math.PI / 2; t.scale.z = 0.85; g.add(t);
+  const mk = new THREE.BoxGeometry(0.02, 0.02, 0.1);
+  [0, 0.38, 0.97, 1.31, 2.05, 2.5, 3.62, 4.05, 4.6, 5.31].forEach((a, i) => { const m = mesh(mk, dark, Math.sin(a) * 1.47, 0.437, -Math.cos(a) * 1.47); m.rotation.y = -a; if (i % 3 === 0) m.scale.z = 1.6; g.add(m); });
+  return g;
+}
+function buildScrews() {
+  const g = new THREE.Group(), slotGeo = new THREE.BoxGeometry(0.075, 0.012, 0.012);
+  [10, 41, 68, 97, 131, 158, 191, 224, 251, 283, 316].forEach((d, i) => {
+    const kind = i === 6 ? 'hex' : i % 3 === 1 ? 'cross' : 'flat', s = new THREE.Group(), p = clockPos(d, 1.47, 0.45);
+    s.add(new THREE.Mesh(new THREE.CylinderGeometry(0.048, 0.052, 0.03, kind === 'hex' ? 6 : 16), [steel, dark, brass][i % 3]));
+    if (kind !== 'hex') { s.add(mesh(slotGeo, black, 0, 0.012, 0)); if (kind === 'cross') { const s2 = mesh(slotGeo, black, 0, 0.012, 0); s2.rotation.y = Math.PI / 2; s.add(s2); } }
+    s.position.copy(p); s.rotation.set(0, rnd(0, Math.PI), rnd(-0.08, 0.08)); g.add(s);
+  });
+  const p = clockPos(345, 1.47, 0.437); g.add(mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.01, 12), black, p.x, p.y, p.z)); // the empty one
+  return g;
+}
+function buildLens() {
+  const g = new THREE.Group(), geo = new THREE.CircleGeometry(1.39, 64);
+  const glass = mesh(geo, M({ color: 0xdfe8ee, metalness: 0, roughness: 0.06, transparent: true, opacity: 0.16, envMapIntensity: 1.4, depthWrite: false }), 0, 0.33, 0);
+  const cr = mesh(geo, new THREE.MeshBasicMaterial({ map: crackTex, transparent: true, opacity: 0.85, depthWrite: false }), 0, 0.332, 0);
+  glass.rotation.x = cr.rotation.x = -Math.PI / 2;
+  g.add(glass, cr);
+  return g;
+}
+function buildDial() {
+  const g = new THREE.Group(), d = mesh(new THREE.CircleGeometry(1.36, 72), M({ map: dialTex, metalness: 0.3, roughness: 0.7 }), 0, 0.1, 0);
+  d.rotation.x = -Math.PI / 2; g.add(d);
+  return g;
+}
+function buildHands() {
+  const g = new THREE.Group();
+  const sh = new THREE.Shape(); sh.moveTo(-0.055, -0.08); sh.lineTo(0.055, -0.08); sh.lineTo(0.035, 0.5); sh.lineTo(0, 0.66); sh.lineTo(-0.04, 0.48); sh.closePath();
+  const hg = new THREE.ExtrudeGeometry(sh, { depth: 0.014, bevelEnabled: false }); hg.rotateX(-Math.PI / 2);
+  const hour = new THREE.Group(); hour.position.y = 0.12; hour.add(new THREE.Mesh(hg, dark));
+  const ng = new THREE.CylinderGeometry(0.004, 0.014, 1.05, 8); ng.rotateX(-Math.PI / 2); ng.translate(0, 0, -0.45);
+  const minute = new THREE.Group(); minute.position.y = 0.15;
+  const needle = new THREE.Mesh(ng, steel); needle.rotation.x = 0.035; minute.add(needle);
+  const eye = mesh(new THREE.TorusGeometry(0.02, 0.006, 6, 14), steel, 0, 0, 0.07); eye.rotation.x = Math.PI / 2; eye.scale.set(0.6, 1.4, 1); minute.add(eye);
+  const wg = new THREE.CylinderGeometry(0.006, 0.006, 1.15, 6); wg.rotateX(-Math.PI / 2); wg.translate(0, 0, -0.45);
+  const second = new THREE.Group(); second.position.y = 0.175;
+  second.add(new THREE.Mesh(wg, copper), mesh(new THREE.SphereGeometry(0.035, 10, 8), copper, 0, 0, 0.12));
+  g.add(hour, minute, second, mesh(new THREE.CylinderGeometry(0.05, 0.05, 0.1, 14), brass, 0, 0.14, 0));
+  hands = { hour, minute, second };
+  return g;
+}
+function buildGears() {
+  const g = new THREE.Group(), axle = new THREE.CylinderGeometry(0.03, 0.03, 0.22, 10);
+  const main = mesh(gearGeo(0.55, 42, 0.04, 0.05, 5), brass, 0.3, -0.13, -0.2);
+  const g2 = mesh(gearGeo(0.33, 24, 0.04, 0.04, 4), steel, -0.32, -0.19, -0.64);
+  const g3 = mesh(gearGeo(0.25, 17, 0.05, 0.04, 0), copper, 0.86, -0.1, 0.28);
+  const pin = mesh(gearGeo(0.13, 10, 0.06, 0.02, 0), steel, 0, -0.06, 0);
+  [main, g2, g3, pin].forEach(m => g.add(m, mesh(axle, dark, m.position.x, -0.16, m.position.z)));
+  gears = { main, g2, g3, pin };
+  return g;
+}
+function buildCoil() {
+  const g = new THREE.Group(); g.position.set(-0.75, -0.14, -0.08); g.rotation.y = 0.18;
+  const core = new THREE.CylinderGeometry(0.035, 0.03, 0.62, 10); core.rotateZ(Math.PI / 2);
+  const head = new THREE.CylinderGeometry(0.07, 0.07, 0.02, 14); head.rotateZ(Math.PI / 2);
+  g.add(mesh(core, steel), mesh(head, steel, -0.31, 0, 0));
+  g.add(new THREE.Mesh(new THREE.TubeGeometry(new Helix(0.085, 0.4, 24), 500, 0.011, 5, false), copper));
+  g.add(new THREE.Mesh(new THREE.TubeGeometry(new Helix(0.105, 0.34, 18), 400, 0.011, 5, false), copper));
+  return g;
+}
+function buildCell() {
+  const g = new THREE.Group(); g.position.set(0.35, -0.255, 0.72);
+  g.add(mesh(new THREE.CylinderGeometry(0.27, 0.27, 0.15, 40), steel, 0, 0.075, 0));
+  g.add(mesh(new THREE.CylinderGeometry(0.2, 0.2, 0.012, 32), dark, 0, 0.155, 0));
+  g.add(mesh(new THREE.CylinderGeometry(0.276, 0.276, 0.07, 40, 1, true, 0.4, 4.2), tapeMat, 0, 0.07, 0));
+  const strip = mesh(new THREE.BoxGeometry(0.1, 0.008, 0.54), tapeMat, 0.04, 0.153, 0); strip.rotation.y = 0.5; g.add(strip);
+  return g;
+}
+function buildBoard() {
+  const g = new THREE.Group(); g.position.set(-0.42, -0.25, 0.5); g.rotation.y = -0.12;
+  const side = M({ color: 0x1b3324, roughness: 0.7 });
+  g.add(new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.03, 0.52), [side, side, M({ map: boardTex, roughness: 0.6, metalness: 0.2 }), side, side, side]));
+  g.add(mesh(new THREE.BoxGeometry(0.2, 0.04, 0.14), black, -0.18, 0.035, -0.08));
+  g.add(mesh(new THREE.BoxGeometry(0.12, 0.035, 0.12), black, 0.16, 0.032, 0.1));
+  g.add(mesh(new THREE.CylinderGeometry(0.055, 0.055, 0.15, 16), M({ color: 0x1f2c4f, roughness: 0.4 }), 0.22, 0.09, -0.13));
+  g.add(mesh(new THREE.CylinderGeometry(0.05, 0.05, 0.01, 16), steel, 0.22, 0.17, -0.13));
+  const res = new THREE.CylinderGeometry(0.018, 0.018, 0.12, 8); res.rotateZ(Math.PI / 2);
+  g.add(mesh(res, M({ color: 0xc8a882, roughness: 0.6 }), -0.02, 0.04, 0.17));
+  g.add(mesh(new THREE.SphereGeometry(0.032, 12, 8), ledMat, -0.3, 0.05, 0.17));
+  return g;
+}
+function wire(pts, mat, r = 0.02) { return new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts.map(p => V(...p))), 80, r, 8, false), mat); }
+function buildWiring() {
+  const g = new THREE.Group();
+  g.add(wire([[0.2, -0.1, 0.62], [0.05, -0.04, 0.74], [-0.12, -0.15, 0.64], [-0.22, -0.22, 0.56]], M({ color: 0x8e1d17, roughness: 0.55 })));
+  g.add(wire([[-0.5, -0.14, -0.02], [-0.44, -0.08, 0.14], [-0.52, -0.21, 0.3]], M({ color: 0x151515, roughness: 0.55 })));
+  const yp = [[-0.75, -0.22, 0.42], [-1.1, -0.12, 0.32], [-1.45, -0.03, 0.18], [-1.72, 0.02, 0.12], [-1.93, -0.05, -0.15], [-1.99, 0.02, -0.62], [-1.76, 0.22, -1.06], [-1.36, 0.38, -1.34]];
+  const yc = new THREE.CatmullRomCurve3(yp.map(p => V(...p)));
+  g.add(new THREE.Mesh(new THREE.TubeGeometry(yc, 120, 0.022, 8, false), yWireMat));
+  g.add(wire(yp.map(([x, y, z], i) => i < 3 ? [x, y - 0.02, z + 0.03] : [x + 0.035, y + 0.035, z + 0.02]), M({ color: 0x5b3a22, roughness: 0.6 }), 0.017));
+  [0.55, 0.78].forEach(u => { const p = yc.getPointAt(u), t = mesh(new THREE.CylinderGeometry(0.045, 0.045, 0.09, 12), tapeMat, p.x + 0.015, p.y + 0.015, p.z + 0.01); t.quaternion.setFromUnitVectors(V(0, 1, 0), yc.getTangentAt(u)); g.add(t); });
+  const end = yc.getPointAt(1); g.add(mesh(new THREE.SphereGeometry(0.028, 8, 6), copper, end.x, end.y, end.z));
+  return g;
+}
+function buildEmitter() {
+  const g = new THREE.Group(); g.position.set(-1.27, 0, -1.27); g.rotation.y = -3 * Math.PI / 4; // local +z points away from the case
+  g.add(mesh(new THREE.BoxGeometry(0.16, 0.42, 0.025), steel, 0, 0.15, -0.075));
+  g.add(mesh(new THREE.BoxGeometry(0.16, 0.025, 0.17), steel, 0, 0.36, 0));
+  g.add(mesh(new THREE.SphereGeometry(0.02, 8, 6), dark, 0, 0.02, -0.06));
+  const head = new THREE.Group(); head.position.set(0, 0.375, 0.01); head.rotation.x = -0.19; g.add(head);
+  const coin = mesh(new THREE.CylinderGeometry(0.06, 0.06, 0.008, 20), copper, 0, 0.005, 0.05); coin.rotation.x = 0.19; head.add(coin);
+  head.add(mesh(new THREE.CylinderGeometry(0.095, 0.105, 0.14, 20), M({ color: 0x6b6f72, metalness: 0.8, roughness: 0.5 }), 0, 0.08, 0));
+  const ring = mesh(new THREE.TorusGeometry(0.085, 0.015, 8, 20), brass, 0, 0.15, 0); ring.rotation.x = Math.PI / 2; head.add(ring);
+  emitterLens = mesh(new THREE.SphereGeometry(0.07, 16, 10), lensMat, 0, 0.15, 0); emitterLens.scale.y = 0.55; head.add(emitterLens);
+  return g;
+}
+function buildCrown() {
+  const g = new THREE.Group();
+  const stem = new THREE.CylinderGeometry(0.035, 0.035, 0.26, 10); stem.rotateZ(Math.PI / 2);
+  const hex = new THREE.CylinderGeometry(0.13, 0.13, 0.12, 6); hex.rotateZ(Math.PI / 2);
+  const w = mesh(new THREE.TorusGeometry(0.065, 0.02, 8, 18), brass, 1.75, 0.02, 0); w.rotation.y = Math.PI / 2;
+  g.add(mesh(stem, steel, 1.8, 0.02, 0), w, mesh(hex, steel, 1.97, 0.02, 0));
+  return g;
+}
+function buildBack() {
+  const g = new THREE.Group();
+  g.add(mesh(new THREE.CylinderGeometry(1.6, 1.62, 0.05, 72), [steel, M({ map: backInTex, metalness: 0.55, roughness: 0.45 }), M({ map: backOutTex, metalness: 0.7, roughness: 0.38 })], 0, -0.29, 0));
+  g.add(mesh(new THREE.BoxGeometry(0.16, 0.02, 0.04), black, 0, -0.29, 1.61));
+  return g;
+}
+function buildStrap(side, chain) {
+  const g = new THREE.Group(), R = 1.25, A = 1.55, n = chain ? 13 : 22, seg = A * R / n;
+  [-0.5, 0.5].forEach(x => g.add(mesh(new THREE.BoxGeometry(0.12, 0.16, 0.34), side > 0 ? brass : steel, x, -0.05, side * 1.62)));
+  const bar = new THREE.CylinderGeometry(0.025, 0.025, 1.12, 8); bar.rotateZ(Math.PI / 2);
+  g.add(mesh(bar, steel, 0, -0.05, side * 1.74));
+  const at = a => [-0.05 - R * (1 - Math.cos(a)), side * (1.76 + R * Math.sin(a))];
+  const put = (geo, mat, x, a, ya = a) => { const [y, z] = at(ya), m = mesh(geo, mat, x, y, z); m.rotation.x = side * a; g.add(m); };
+  if (!chain) {
+    const box = new THREE.BoxGeometry(0.9, 0.07, seg * 1.04), stitch = new THREE.BoxGeometry(0.95, 0.08, 0.015);
+    for (let i = 0; i < n; i++) { const a = (i + 0.5) / n * A; put(box, rubber, 0, a); if (i % 6 === 3) put(stitch, copper, 0, a); }
+  } else {
+    const plate = new THREE.BoxGeometry(0.045, 0.1, seg * 1.25), pin = new THREE.CylinderGeometry(0.022, 0.022, 0.98, 8); pin.rotateZ(Math.PI / 2);
+    for (let i = 0; i < n; i++) {
+      const a = (i + 0.5) / n * A, off = i % 2 ? 0.035 : 0;
+      [-0.42, 0, 0.42].forEach(x => put(plate, i % 2 ? steel : dark, x + (x ? Math.sign(x) * off : off), a));
+      put(pin, steel, 0, 0, i / n * A);
+    }
+  }
+  return g;
+}
+function hudText() {
+  const c = document.createElement('canvas'); c.width = 512; c.height = 128;
+  const g = c.getContext('2d'), t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace;
+  const m = new THREE.SpriteMaterial({ map: t, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false });
+  m.userData.base = 1; hudMats.push(m);
+  const s = new THREE.Sprite(m); s.scale.set(1.5, 0.375, 1);
+  s.userData.set = txt => {
+    if (s.userData.txt === txt) return; s.userData.txt = txt;
+    g.clearRect(0, 0, 512, 128); g.font = '54px "Share Tech Mono", monospace'; g.fillStyle = '#ffcf3a'; g.shadowColor = '#ffae00'; g.shadowBlur = 14;
+    g.fillText(txt, 16, 82); g.fillRect(16, 100, 60, 3); t.needsUpdate = true;
+  };
+  return s;
+}
+function buildHUD() {
+  const g = new THREE.Group(); g.position.set(0, 2.35, 0);
+  const hm = (map, op) => { const m = new THREE.MeshBasicMaterial({ map, transparent: true, opacity: op, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide, toneMapped: false }); m.userData.base = op; hudMats.push(m); return m; };
+  hudRingA = mesh(new THREE.PlaneGeometry(3.6, 3.6), hm(ringTexA, 0.85));
+  hudRingB = mesh(new THREE.PlaneGeometry(2.3, 2.3), hm(ringTexB, 0.8), 0, 0.14, 0);
+  for (const r of [hudRingA, hudRingB]) { r.rotation.x = -Math.PI / 2; r.userData.nopick = true; g.add(r); }
+  [[-0.95, 0.55, 0.4], [1.05, 0.4, 0.3], [0.6, 0.85, -0.8], [-0.95, 0.3, -0.75]].forEach(p => { const s = hudText(); s.position.set(...p); g.add(s); hudSprites.push(s); });
+  return g;
+}
+
+function shellMat(m) { const c = m.clone(); c.transparent = true; c.userData = { base: m.opacity, dw: m.depthWrite }; shellMats.push(c); return c; }
+function register(key, group, o = {}) {
+  const info = INFO[key];
+  const p = { group, info, base: group.position.clone(), sep: o.sep ? V(...o.sep) : null, pullF: 0, shell: !!o.shell, inner: !!o.inner };
+  p.pull = o.pull ? V(...o.pull) : o.noPull ? null : p.sep;
+  group.traverse(c => {
+    if (p.shell && c.isMesh) c.material = Array.isArray(c.material) ? c.material.map(shellMat) : shellMat(c.material);
+    if ((c.isMesh || c.isSprite) && !c.userData.nopick) { c.userData.part = key; pickables.push(c); }
+  });
+  const el = document.createElement('div'); el.className = 'tag'; el.innerHTML = `<b>${info.code}</b>${info.tag}`;
+  el.addEventListener('click', () => select(key));
+  p.el = el; p.label = new CSS2DObject(el); p.label.position.set(...(o.label || [0, 0.4, 0])); group.add(p.label);
+  watch.add(group); parts[key] = p;
+}
+register('housing', buildHousing(), { shell: true, noPull: true, label: [-1.15, -0.2, 1.3] });
+register('patch', buildPatch(), { shell: true, sep: [0.67, 0, 0.6], label: [1.3, 0.22, 1.17] });
+register('bezel', buildBezel(), { shell: true, sep: [0, 1.5, 0], label: [0, 0.5, -1.47] });
+register('screws', buildScrews(), { shell: true, sep: [0, 1.78, 0], label: [1.05, 0.52, -1.05] });
+register('lens', buildLens(), { shell: true, sep: [0, 1.15, 0], label: [0.56, 0.36, -0.58] });
+register('dial', buildDial(), { shell: true, sep: [0, 0.55, 0], label: [-0.85, 0.14, 0.5] });
+register('hands', buildHands(), { sep: [0, 0.85, 0], label: [0, 0.3, 0] });
+register('gears', buildGears(), { inner: true, pull: [1.1, 0.95, -1.2], label: [0.3, -0.02, -0.2] });
+register('coil', buildCoil(), { inner: true, pull: [-1.3, 0.9, -0.4], label: [0, 0.14, 0] });
+register('cell', buildCell(), { inner: true, pull: [1, 0.85, 1.25], label: [0, 0.22, 0] });
+register('board', buildBoard(), { inner: true, pull: [-0.8, 0.8, 1.3], label: [0, 0.1, 0] });
+register('wiring', buildWiring(), { noPull: true, label: [-1.99, 0.08, -0.62] });
+register('emitter', buildEmitter(), { sep: [-0.45, 0.85, -0.45], label: [0, 0.68, 0] });
+register('crown', buildCrown(), { sep: [0.8, 0, 0], label: [2.05, 0.18, 0] });
+register('back', buildBack(), { sep: [0, -1.3, 0], label: [0.95, -0.32, 1.2] });
+register('strapA', buildStrap(1, false), { sep: [0, 0, 0.75], label: [0.55, -0.62, 2.8] });
+register('strapB', buildStrap(-1, true), { sep: [0, 0, -0.75], label: [0.55, -0.62, -2.8] });
+register('hud', buildHUD(), { sep: [0, 1.3, 0], noPull: true, label: [0, 1.15, 0] });
+
+const innerLight = new THREE.PointLight(0xffb020, 0.5, 2.2, 2); innerLight.position.set(-0.4, 0, 0.4); watch.add(innerLight);
+const shadow = mesh(new THREE.PlaneGeometry(4.6, 7.2), new THREE.MeshBasicMaterial({ map: shadowTex, transparent: true, depthWrite: false, toneMapped: false }), 0, -1.75, 0);
+shadow.rotation.x = -Math.PI / 2; scene.add(shadow);
+
+// ---------- projection beam (emitter -> HUD ring), rebuilt every frame so it follows separated parts
+const N = 32, fanArr = new Float32Array(N * 9), lineArr = new Float32Array(8 * 6);
+const beamMat = (base, Cls) => { const m = new Cls({ color: 0xffcf3a, transparent: true, opacity: base, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide, toneMapped: false }); m.userData.base = base; hudMats.push(m); return m; };
+const fanGeo = new THREE.BufferGeometry(); fanGeo.setAttribute('position', new THREE.BufferAttribute(fanArr, 3).setUsage(THREE.DynamicDrawUsage));
+const lineGeo = new THREE.BufferGeometry(); lineGeo.setAttribute('position', new THREE.BufferAttribute(lineArr, 3).setUsage(THREE.DynamicDrawUsage));
+const fan = new THREE.Mesh(fanGeo, beamMat(0.05, THREE.MeshBasicMaterial));
+const lines = new THREE.LineSegments(lineGeo, beamMat(0.3, THREE.LineBasicMaterial));
+fan.frustumCulled = lines.frustumCulled = false; scene.add(fan, lines);
+const vA = V(), vB = V(), vC = V();
+const ringPt = (v, a, r) => parts.hud.group.localToWorld(v.set(Math.cos(a) * r, 0, Math.sin(a) * r));
+function updateBeam(visible) {
+  fan.visible = lines.visible = visible;
+  if (!visible) return;
+  emitterLens.getWorldPosition(vA);
+  for (let i = 0; i < N; i++) { ringPt(vB, i / N * TAU, 1.62); ringPt(vC, (i + 1) / N * TAU, 1.62); fanArr.set([vA.x, vA.y, vA.z, vB.x, vB.y, vB.z, vC.x, vC.y, vC.z], i * 9); }
+  for (let i = 0; i < 8; i++) { ringPt(vB, i / 8 * TAU + 0.2, 1.66); lineArr.set([vA.x, vA.y, vA.z, vB.x, vB.y, vB.z], i * 6); }
+  fanGeo.attributes.position.needsUpdate = lineGeo.attributes.position.needsUpdate = true;
+}
+function hudTick() {
+  const d = new Date(), p = n => String(n).padStart(2, '0'), [a, b, c, e] = hudSprites;
+  a.userData.set(`T ${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`);
+  b.userData.set(Math.random() < 0.12 ? 'CELL ??%' : 'CELL 61%');
+  c.userData.set(d.getSeconds() % 2 ? 'SYNC ---' : 'SYNC');
+  e.userData.set('L +4°');
+}
+hudTick(); setInterval(hudTick, 1000);
+
+// ---------- UI
+const info = document.getElementById('info'), tip = document.getElementById('tip'), bar = document.getElementById('bar');
+const state = { rotate: true, internals: false, separate: false, labels: true, hud: true };
+const row = (k, v) => v ? `<dt>${k}</dt><dd>${v}</dd>` : '';
+function blink() { info.classList.remove('blink'); void info.offsetWidth; info.classList.add('blink'); }
+function showOverview() {
+  const open = Object.values(INFO).filter(i => i.ask).length;
+  info.innerHTML = `<div class="code">UNIT 01 · INSPECTION COPY</div><h2>Wrist unit, yellow</h2>
+<dl>${row('builder', 'Rhada Evergarden')}${row('status', 'running <span class="dim">(mostly)</span>')}${row('parts', `17 catalogued · ${red(3)} not`)}${row('power', 'C-10 → C-11 → ? → C-13')}${row('open', `${open} questions`)}</dl>
+<p class="note">built from what was lying around. not all of it was lying around.</p>
+<h3>wiring, roughly</h3>${SCHEM}
+<h3>log</h3><ol class="log">${LOG.map(([d, s]) => `<li><b>${d}</b>${s}</li>`).join('')}</ol>
+<p class="ask">anything that isn’t written here, ask Rhada Evergarden.</p>`;
+  blink();
+}
+function showPart(k) {
+  const p = parts[k], i = p.info;
+  info.innerHTML = `<div class="code">${i.code}</div><h2>${i.name}</h2>
+<dl>${row('material', i.mat)}${row('source', i.src)}${row('power', i.pwr)}${row('build', i.build)}</dl>
+${i.note ? `<p class="note">${i.note}</p>` : ''}
+${i.ask ? `<p class="ask">${i.ask} <span class="dim">— ask Rhada Evergarden</span></p>` : ''}
+<div class="act">${p.pull ? `<button data-pull="${k}">${pulled.has(k) ? 'put back' : 'pull out'}</button>` : ''}<button data-back>overview</button></div>`;
+  blink();
+}
+let selected = null, selBox = null;
+function select(k) {
+  if (selBox) { scene.remove(selBox); selBox.geometry.dispose(); selBox.material.dispose(); selBox = null; }
+  if (selected) parts[selected].el.classList.remove('sel');
+  selected = k;
+  if (!k) return showOverview();
+  selBox = new THREE.BoxHelper(parts[k].group, 0xffcf3a);
+  Object.assign(selBox.material, { depthTest: false, transparent: true, opacity: 0.55, toneMapped: false });
+  selBox.renderOrder = 10; scene.add(selBox);
+  parts[k].el.classList.add('sel');
+  showPart(k);
+}
+info.addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  if (b.dataset.pull) { const k = b.dataset.pull; pulled.has(k) ? pulled.delete(k) : pulled.add(k); showPart(k); }
+  if (b.hasAttribute('data-back')) select(null);
+});
+function sync() {
+  bar.querySelectorAll('[data-act]').forEach(b => { const a = b.dataset.act; if (a in state) { b.classList.toggle('on', state[a]); b.setAttribute('aria-pressed', String(state[a])); } });
+  controls.autoRotate = state.rotate;
+  labelRenderer.domElement.style.display = state.labels ? '' : 'none';
+}
+bar.addEventListener('click', e => {
+  const b = e.target.closest('[data-act]'); if (!b) return;
+  const a = b.dataset.act;
+  if (a === 'reset') { camera.position.copy(HOME); controls.target.copy(TGT); pulled.clear(); state.separate = state.internals = false; if (selected) showPart(selected); }
+  else state[a] = !state[a];
+  sync();
+});
+addEventListener('keydown', e => { if (e.key === 'Escape') select(null); });
+
+// ---------- picking
+const ray = new THREE.Raycaster(), ndc = new THREE.Vector2(), cvs = renderer.domElement;
+let hoverDirty = false, downAt = null, mx = 0, my = 0;
+const st = { sepF: 0, shellF: 0, hudF: 1 };
+function pick() {
+  ray.setFromCamera(ndc, camera);
+  for (const h of ray.intersectObjects(pickables, false)) {
+    const k = h.object.userData.part, p = parts[k];
+    if (state.internals && p.shell) continue; // look through the casing
+    if (k === 'hud' && st.hudF < 0.5) continue;
+    if (k === 'lens' && st.sepF < 0.3 && p.pullF < 0.3) continue; // glass sits over the dial; use its tag
+    return k;
+  }
+  return null;
+}
+const setNdc = e => { mx = e.clientX; my = e.clientY; ndc.set(mx / innerWidth * 2 - 1, -(my / innerHeight) * 2 + 1); };
+cvs.addEventListener('pointermove', e => { if (e.buttons) { tip.style.display = 'none'; return; } setNdc(e); hoverDirty = true; });
+cvs.addEventListener('pointerleave', () => { tip.style.display = 'none'; });
+cvs.addEventListener('pointerdown', e => { downAt = [e.clientX, e.clientY]; });
+cvs.addEventListener('pointerup', e => {
+  if (!downAt) return;
+  const moved = Math.hypot(e.clientX - downAt[0], e.clientY - downAt[1]); downAt = null;
+  if (moved < 6) { setNdc(e); select(pick()); }
+});
+function hover() {
+  hoverDirty = false;
+  const k = pick();
+  if (k) { tip.textContent = `${INFO[k].code} ${INFO[k].name}`; tip.style.display = 'block'; tip.style.left = mx + 'px'; tip.style.top = my + 'px'; }
+  else tip.style.display = 'none';
+  cvs.style.cursor = k ? 'pointer' : '';
+}
+
+// ---------- layout (keeps the watch centred in the space the panel leaves)
+function layout() {
+  const W = innerWidth, H = innerHeight, wide = W > 760;
+  const ox = wide ? 376 : 0, oy = wide ? 0 : Math.round(H * 0.36 + 84);
+  camera.fov = wide ? 35 : 50;
+  camera.aspect = (W + ox) / (H + oy);
+  camera.setViewOffset(W + ox, H + oy, ox, oy, W, H);
+  renderer.setSize(W, H); labelRenderer.setSize(W, H);
+}
+addEventListener('resize', layout); layout();
+
+// ---------- loop
+const clock = new THREE.Clock();
+const damp = (a, b, l, dt) => a + (b - a) * (1 - Math.exp(-l * dt));
+let glitchUntil = 0;
+function loop() {
+  requestAnimationFrame(loop);
+  const dt = Math.min(clock.getDelta(), 0.05), t = clock.elapsedTime;
+  st.sepF = damp(st.sepF, state.separate ? 1 : 0, 5, dt);
+  st.shellF = damp(st.shellF, state.internals ? 1 : 0, 6, dt);
+  st.hudF = damp(st.hudF, state.hud ? 1 : 0, 8, dt);
+  for (const k in parts) {
+    const p = parts[k];
+    p.pullF = damp(p.pullF, pulled.has(k) ? 1 : 0, 6, dt);
+    p.group.position.copy(p.base);
+    if (p.sep) p.group.position.addScaledVector(p.sep, st.sepF);
+    if (p.pull) p.group.position.addScaledVector(p.pull, p.pullF);
+    if (p.inner) p.label.visible = st.shellF > 0.5 || st.sepF > 0.5 || p.pullF > 0.5;
+  }
+
+  // flicker: a constant shimmer plus the occasional dropout
+  let f = 0.9 + 0.06 * Math.sin(t * 31) + 0.04 * Math.sin(t * 7.3);
+  const glitch = t < glitchUntil;
+  if (glitch) f *= 0.2 + Math.random() * 0.5;
+  else if (Math.random() < 0.007) glitchUntil = t + 0.04 + Math.random() * 0.22;
+  const hf = f * st.hudF, hud = parts.hud;
+  for (const m of hudMats) m.opacity = m.userData.base * hf;
+  hud.group.visible = hud.label.visible = st.hudF > 0.01;
+  if (glitch) hud.group.position.x += (Math.random() - 0.5) * 0.08;
+  hudRingA.rotation.z += dt * 0.12; hudRingB.rotation.z -= dt * 0.2;
+  ledMat.emissiveIntensity = 2.2 * f;
+  lensMat.emissiveIntensity = (0.6 + 2.6 * st.hudF) * f;
+  yWireMat.emissiveIntensity = 0.45 * f;
+  hudLight.intensity = 6 * hf; innerLight.intensity = 0.5 * f;
+
+  const so = 1 - 0.88 * st.shellF, dw = st.shellF < 0.02;
+  for (const m of shellMats) { m.opacity = m.userData.base * so; m.depthWrite = dw && m.userData.dw; }
+
+  // real time, with the catch at 40
+  const d = new Date(), ms = d.getMilliseconds() / 1000, s = d.getSeconds();
+  const mins = d.getMinutes() + (s + ms) / 60, hrs = (d.getHours() % 12) + mins / 60;
+  hands.hour.rotation.y = -hrs / 12 * TAU;
+  hands.minute.rotation.y = -mins / 60 * TAU;
+  let sv = s - 1 + Math.min(1, ms / 0.12);
+  if (s === 40 || s === 41) sv = 40 + Math.sin(t * 70) * 0.1;
+  hands.second.rotation.y = -sv / 60 * TAU;
+  gears.main.rotation.y += dt * 0.3;
+  gears.g2.rotation.y -= dt * 0.3 * 0.55 / 0.33;
+  if (s % 10 !== 7) gears.g3.rotation.y -= dt * 0.3 * 0.55 / 0.25; // the copper one hesitates
+  gears.pin.rotation.y += dt * 1.1;
+
+  watch.updateMatrixWorld(true);
+  updateBeam(hud.group.visible);
+  if (selBox) selBox.update();
+  if (hoverDirty) hover();
+  controls.update();
+  renderer.render(scene, camera);
+  labelRenderer.render(scene, camera);
+}
+showOverview(); sync(); loop();
+requestAnimationFrame(() => document.getElementById('loading').classList.add('done'));
+</script>
+</body>
+</html>
