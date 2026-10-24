@@ -118,7 +118,7 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(-
     <div id="bar" aria-label="view controls">
       <button data-act="rotate">rotate</button><button data-act="internals">internals</button><button data-act="separate">separate</button><button data-act="labels">labels</button><button data-act="hud">hud</button><button data-act="reset">reset</button>
     </div>
-    <div id="hint">drag to spin, click a part</div>
+    <div id="hint">drag to spin, ctrl+scroll to zoom</div>
     <div id="loading">loading...</div>
   </div>
   <aside id="panel" aria-live="polite"><div id="info"></div></aside>
@@ -217,6 +217,8 @@ const HOME = V(5.5, 4.7, 7.0), TGT = V(0, 0.75, 0);
 camera.position.copy(HOME);
 const controls = new OrbitControls(camera, renderer.domElement);
 Object.assign(controls, { enableDamping: true, enablePan: false, minDistance: 3.5, maxDistance: 16, autoRotate: true, autoRotateSpeed: 0.5 });
+// let the page scroll over the viewer; ctrl/cmd + wheel zooms
+stage.addEventListener('wheel', e => { if (!e.ctrlKey && !e.metaKey) e.stopPropagation(); }, { capture: true });
 controls.target.copy(TGT);
 
 scene.add(new THREE.HemisphereLight(0xfff1d6, 0x1a140c, 0.35));
