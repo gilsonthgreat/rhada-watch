@@ -3,15 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Yellow Unit — R. Evergarden</title>
-<meta name="description" content="Inspection copy of a wrist unit built from scrap by Rhada Evergarden. Notes incomplete.">
+<title>Yellow Unit | Rhada Evergarden</title>
+<meta name="description" content="A watch Rhada Evergarden built out of scrap, with her bench notes.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
 <style>
 :root{--y:#ffcf3a;--ink:#e8e0c8;--dim:#8a836f;--line:rgba(255,207,58,.32);--panel:rgba(14,12,9,.82)}
 *{box-sizing:border-box}
-html,body{margin:0;height:100%;overflow:hidden;background:#090806;color:var(--ink);font:14px/1.45 'Share Tech Mono',ui-monospace,Consolas,monospace}
+html,body{margin:0;height:100%;overflow:hidden;background:#090806;color:var(--ink);font:13px/1.5 'IBM Plex Mono',ui-monospace,Consolas,monospace}
 #stage{position:fixed;inset:0;background:
   linear-gradient(rgba(255,207,58,.03) 1px,transparent 1px) 0 0/44px 44px,
   linear-gradient(90deg,rgba(255,207,58,.03) 1px,transparent 1px) 0 0/44px 44px,
@@ -21,28 +21,28 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:50;bac
 @keyframes flick{0%,100%{opacity:1}41%{opacity:.6}42%{opacity:1}77%{opacity:.75}77.6%{opacity:1}}
 @keyframes blink{0%{opacity:.15}40%{opacity:1}60%{opacity:.45}100%{opacity:1}}
 header{position:fixed;left:22px;top:18px;z-index:5;pointer-events:none}
-.sig{font:700 27px/1 Caveat,cursive;color:var(--y);transform:rotate(-2deg);text-shadow:0 0 12px rgba(255,174,0,.45)}
-h1{margin:6px 0 0;font-size:19px;letter-spacing:.18em;text-transform:uppercase;font-weight:400}
+.sig{font:600 13px/1 'Chakra Petch',sans-serif;color:var(--y);letter-spacing:.32em;text-transform:uppercase;text-shadow:0 0 12px rgba(255,174,0,.45)}
+h1{margin:6px 0 0;font:700 30px/1 'Chakra Petch',sans-serif;letter-spacing:.12em;text-transform:uppercase}
 h1 span{color:var(--dim)}
 .sub{margin:2px 0 0;color:var(--dim);font-size:12px;letter-spacing:.08em}
 #panel{position:fixed;right:18px;top:18px;bottom:86px;width:340px;z-index:5;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--y);backdrop-filter:blur(6px);padding:18px 18px 16px;overflow:auto;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
 #info.blink{animation:blink .3s steps(3)}
 .code{color:var(--y);font-size:12px;letter-spacing:.2em}
-#info h2{margin:2px 0 12px;font-size:22px;font-weight:400;letter-spacing:.06em}
+#info h2{margin:2px 0 12px;font:600 24px/1.1 'Chakra Petch',sans-serif;letter-spacing:.06em;text-transform:uppercase}
 #info h3{margin:18px 0 6px;font-size:11px;font-weight:400;color:var(--dim);letter-spacing:.2em;text-transform:uppercase;border-bottom:1px dashed var(--line);padding-bottom:4px}
 dl{display:grid;grid-template-columns:92px 1fr;gap:6px 10px;margin:0}
 dt{color:var(--dim);font-size:11px;letter-spacing:.12em;text-transform:uppercase;padding-top:2px}
 dd{margin:0}
 .dim{color:var(--dim)}
-.note{font:500 23px/1.1 Caveat,cursive;color:#efdfae;margin:16px 0 4px;transform:rotate(-.6deg)}
+.note{font:italic 13px/1.55 'IBM Plex Mono',monospace;color:#efdfae;margin:16px 0 4px;padding-left:10px;border-left:2px solid var(--line)}
 .redact{background:var(--ink);border-radius:1px;user-select:none;opacity:.85}
 s{color:var(--dim)}
 .ask{margin:14px 0 0;padding-top:10px;border-top:1px dashed var(--line);color:var(--y);font-size:12px;letter-spacing:.04em}
 .log{list-style:none;padding:0;margin:0;display:grid;gap:4px;font-size:13px}
 .log b{color:var(--y);font-weight:400;margin-right:8px}
 .schem{width:100%;height:auto;color:var(--y);display:block}
-.schem text{font:12px 'Share Tech Mono',monospace;fill:var(--y)}
-.schem .hand{font:18px Caveat,cursive;fill:#efdfae}
+.schem text{font:11px 'IBM Plex Mono',monospace;fill:var(--y)}
+.schem .hand{font:italic 12px 'IBM Plex Mono',monospace;fill:#efdfae}
 .act{display:flex;gap:8px;margin-top:16px}
 button{font:inherit;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);background:rgba(20,17,12,.85);border:1px solid var(--line);padding:8px 12px;cursor:pointer;transition:background .15s,color .15s,border-color .15s}
 button:hover{border-color:var(--y);color:var(--y)}
@@ -58,7 +58,7 @@ button:focus-visible{outline:2px solid var(--y);outline-offset:2px}
 #loading.done{opacity:0;pointer-events:none}
 @media (max-width:760px){
   header{left:14px;top:12px}
-  .sig{font-size:22px} h1{font-size:14px} .sub{display:none}
+  .sig{font-size:11px} h1{font-size:20px} .sub{display:none}
   #panel{left:10px;right:10px;top:auto;bottom:84px;width:auto;max-height:36vh;padding:14px}
   #bar{left:10px;right:10px;bottom:10px;transform:none;display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
   #bar button{padding:7px 4px;font-size:11px;letter-spacing:.08em}
@@ -76,8 +76,8 @@ button:focus-visible{outline:2px solid var(--y);outline-offset:2px}
 <div id="stage"></div>
 <header>
   <div class="sig">Rhada Evergarden</div>
-  <h1>Yellow Unit <span>/ scrap</span></h1>
-  <p class="sub">inspection copy · notes incomplete</p>
+  <h1>Yellow Unit</h1>
+  <p class="sub">bench notes, still working on them</p>
 </header>
 <aside id="panel" aria-live="polite"><div id="info"></div></aside>
 <nav id="bar" aria-label="view controls">
@@ -88,9 +88,9 @@ button:focus-visible{outline:2px solid var(--y);outline-offset:2px}
   <button data-act="hud">hud</button>
   <button data-act="reset">reset</button>
 </nav>
-<div id="hint">drag to turn · scroll to zoom · click a part</div>
+<div id="hint">drag to rotate, scroll to zoom, click a part to read about it</div>
 <div id="tip"></div>
-<div id="loading">WARMING UP…</div>
+<div id="loading">LOADING…</div>
 
 <script type="module">
 import * as THREE from 'three';
@@ -107,26 +107,26 @@ const V = (x, y, z) => new THREE.Vector3(x, y, z);
 // ---------- notes (deliberately incomplete)
 const red = n => `<span class="redact" title="redacted">${'&nbsp;'.repeat(n)}</span>`;
 const INFO = {
-  housing: { code: 'C-01', name: 'Housing', tag: 'housing', mat: 'pressed steel · yellow enamel, 3 coats <span class="dim">(3 different cans)</span>', src: 'fuel drum lid, probably', build: 'hammered round over a pipe. seam at 7.', note: 'cracked at four. patched. runs warm on the left side and I haven’t decided if that’s a problem.', ask: 'why the left side.' },
-  patch: { code: 'C-02', name: 'Patch plate', tag: 'patch', mat: 'galvanized sheet', src: '—', build: 'four rivets. rivet 3 is a screw.', note: 'covers the crack. covers <s>something else</s> the crack.', ask: 'covers what else.' },
-  bezel: { code: 'C-03', name: 'Bezel', tag: 'bezel', mat: 'brass', src: 'compression fitting, cut down', build: 'marks filed by hand. spacing uneven.', note: 'turns one way. the marks aren’t hours.', ask: 'then what are they.' },
-  screws: { code: 'C-04', name: 'Fasteners', tag: 'screws 11/12', mat: 'steel, brass · mixed heads', src: 'the jar', build: 'flat, cross, one hex. 11 of 12.', note: 'twelfth hole is empty. closes fine without it.' },
-  lens: { code: 'C-05', name: 'Lens', tag: 'lens', mat: 'mineral glass <span class="dim">(probably)</span>', src: 'storm lantern', build: 'pressed in. no gasket.', note: 'the crack was there before. kept it.' },
-  dial: { code: 'C-06', name: 'Dial', tag: 'dial', mat: 'tinplate · paint · ink', src: 'same tin as C-15', build: 'numerals in three different hands. no 12.', note: 'twelve isn’t missing.', ask: 'where it is, then.' },
-  hands: { code: 'C-07', name: 'Hands', tag: 'hands', mat: 'sheet steel · sewing needle · wire', src: 'various', build: 'hour: filed. minute: a needle, bent back straight-ish. second: wire.', note: 'second hand catches at 40. <s>fix</s> leave it.' },
-  gears: { code: 'C-08', name: 'Gear train', tag: 'gears', mat: 'brass · steel · copper', src: `music box, gas meter, ${red(9)}`, build: 'tooth counts don’t agree with each other. keeps time anyway.', note: 'the copper one stays in. don’t take it out.', ask: 'where the copper one came from.' },
-  coil: { code: 'C-09', name: 'Coil', tag: 'coil', mat: 'enamelled copper · iron nail core', src: 'dead motor', pwr: '?', build: 'hand-wound. lost count around 300 turns.', note: 'hums when the HUD is on. sometimes when it isn’t.', ask: 'what it’s for.' },
-  cell: { code: 'C-10', name: 'Cell', tag: 'cell', mat: '—', src: red(10), pwr: 'HUD says 61%. the meter says something else.', build: 'taped. twice.', note: 'doesn’t drain like it should.', ask: 'how long it lasts.' },
-  board: { code: 'C-11', name: 'Logic board', tag: 'board', mat: 'fibreglass · copper · silver ink', src: 'salvaged. half the traces scraped off.', pwr: 'C-10 → here → C-13', build: 'scraped half redrawn by hand.', note: 'the new half isn’t a copy of the old half.', ask: 'what it does now.' },
-  wiring: { code: 'C-12', name: 'Wiring', tag: 'wiring', mat: 'copper · PVC · tape', src: 'everywhere', build: `red: cell. yellow: emitter. black: ${red(12)}`, note: 'runs outside the case on purpose.' },
-  emitter: { code: 'C-13', name: 'Emitter', tag: 'emitter', mat: 'diode · bike-lamp lens · can metal', src: 'bicycle lamp', pwr: 'via C-11', build: 'tilted about 11°. shimmed with a coin.', note: 'projects the HUD. the flicker isn’t the diode.', ask: 'then what is it.' },
-  crown: { code: 'C-14', name: 'Crown', tag: 'crown', mat: 'steel', src: 'M5 hex bolt', build: `pull: set. push: wind. twist both ways: ${red(6)}` },
-  back: { code: 'C-15', name: 'Caseback', tag: 'back', mat: 'tinplate', src: 'tin of peaches. label still on the inside.', build: 'friction fit. pry slot at 6.', note: 'something’s scratched on the inside. it isn’t my name.', ask: 'whose.' },
-  strapA: { code: 'C-16', name: 'Strap, 6 side', tag: 'strap', mat: 'tyre rubber', src: 'bicycle, rear tyre', build: 'cut to width, stitched with wire.', note: 'rubs. everyone says it rubs.' },
-  strapB: { code: 'C-17', name: 'Strap, 12 side', tag: 'chain', mat: 'chain links', src: 'same bicycle', build: 'pins pressed out and back in by hand.' },
-  hud: { code: 'C-??', name: 'HUD', tag: 'HUD', mat: 'light', src: 'C-13', build: 'reads: time · cell · L° · SYNC', note: 'SYNC doesn’t sync to anything. yet.', ask: 'to what.' },
+  housing: { code: 'C-01', name: 'Case', tag: 'case', mat: 'Pressed steel, painted yellow. Three coats from three different cans, so it doesn’t quite match.', src: 'An old fuel drum lid', build: 'Hammered round over a pipe. The seam is at 7.', note: 'Cracked it while I was bending it, patched it and kept going. The left side gets warm after a while and I still haven’t worked out why.' },
+  patch: { code: 'C-02', name: 'Patch', tag: 'patch', mat: 'Galvanized sheet', src: 'Off a roof vent, I think', build: 'Four rivets. Ran out partway, so the third one is a screw.', note: 'Covers the crack. Mostly.' },
+  bezel: { code: 'C-03', name: 'Bezel', tag: 'bezel', mat: 'Brass', src: 'A plumbing fitting, cut down', build: 'Filed the marks in by hand.', note: 'Only turns one way. Don’t try to read the marks as hours.', ask: 'Ask me what they’re for.' },
+  screws: { code: 'C-04', name: 'Screws', tag: 'screws', mat: 'Whatever was in the jar', src: 'The jar', build: 'Flat heads, a few crosses, one hex. Eleven total.', note: 'There’s a hole for a twelfth. Closes fine without it.' },
+  lens: { code: 'C-05', name: 'Glass', tag: 'glass', mat: 'Mineral glass, probably', src: 'An old storm lantern', build: 'Pressed in. No gasket, so keep it dry.', note: 'It was already cracked when I found it. Didn’t bother replacing it.' },
+  dial: { code: 'C-06', name: 'Dial', tag: 'dial', mat: 'Tin, paint, ink', src: 'Same tin as the back', build: 'Did the numbers at different times with whatever I had on me, so none of them match.', note: '12 is blank on purpose.' },
+  hands: { code: 'C-07', name: 'Hands', tag: 'hands', mat: 'Sheet steel, a sewing needle, wire', src: 'Bits and pieces', build: 'Hour hand is filed from sheet. Minute hand is a needle I bent back straight, more or less. Second hand is just wire.', note: 'The second hand sticks at 40 for a couple of seconds. Tried to fix it once, then left it.' },
+  gears: { code: 'C-08', name: 'Gears', tag: 'gears', mat: 'Brass and steel, plus one copper', src: `A music box, an old gas meter, and ${red(8)}`, build: 'The tooth counts don’t really line up. Keeps time anyway.', note: 'Don’t take the copper one out.', ask: 'Ask where it came from.' },
+  coil: { code: 'C-09', name: 'Coil', tag: 'coil', mat: 'Copper wire wound on an iron nail', src: 'Pulled out of a dead motor', pwr: '?', build: 'Wound it by hand. Lost count somewhere around 300 turns.', note: 'Hums when the HUD is on. Sometimes when it’s off too.', ask: 'Easier to explain this one in person.' },
+  cell: { code: 'C-10', name: 'Cell', tag: 'cell', mat: '?', src: red(10), pwr: 'The HUD says 61%. My meter says something else.', build: 'Taped twice.', note: 'Should have died a while ago.' },
+  board: { code: 'C-11', name: 'Board', tag: 'board', mat: 'Fibreglass, copper, silver ink', src: 'Salvaged', pwr: 'From the cell, out to the emitter', build: 'Half the original traces were scraped off. I redrew that side by hand.', note: 'I didn’t copy the old layout when I redrew it.' },
+  wiring: { code: 'C-12', name: 'Wiring', tag: 'wiring', mat: 'Copper, PVC, tape', src: 'Bits from everywhere', build: `Red goes to the cell. Yellow goes up to the emitter. Black goes to ${red(12)}`, note: 'It runs outside the case on purpose, so I can get to it.' },
+  emitter: { code: 'C-13', name: 'Emitter', tag: 'emitter', mat: 'A diode and a bike lamp lens in a housing cut from a can', src: 'Bike lamp', pwr: 'Through the board', build: 'Tilted about 11°. There’s a coin under it as a shim.', note: 'This is what puts the HUD up. The flicker comes from somewhere else.', ask: 'I know where. Ask.' },
+  crown: { code: 'C-14', name: 'Crown', tag: 'crown', mat: 'Steel', src: 'An M5 hex bolt', build: `Pull to set, push to wind. Twisting it both ways ${red(9)}` },
+  back: { code: 'C-15', name: 'Back', tag: 'back', mat: 'Tinplate', src: 'A tin of peaches. The label is still on the inside.', build: 'Friction fit. Pry it open from the slot at 6.', note: 'Somebody scratched something on the inside before I ever had the tin. Not my handwriting.' },
+  strapA: { code: 'C-16', name: 'Strap', tag: 'strap', mat: 'Tyre rubber', src: 'Back tyre off a bike', build: 'Cut to width and stitched on with wire.', note: 'Yes, it rubs.' },
+  strapB: { code: 'C-17', name: 'Chain strap', tag: 'chain', mat: 'Bike chain', src: 'Same bike', build: 'Pressed the pins out and back in by hand.' },
+  hud: { code: 'C-18', name: 'HUD', tag: 'HUD', mat: 'Light', src: 'The emitter', build: 'Shows the time, the cell, how warm the left side is, and SYNC.', note: 'SYNC isn’t hooked up to anything yet.', ask: 'Ask me what it’s supposed to sync to.' },
 };
-const LOG = [['d.01', 'drum lid, hammered round. seam at 7.'], ['d.03', 'gears from three different things. they argue.'], ['d.04', '<s>scrapped the board</s> redrew the board.'], ['d.06', 'first tick.'], ['d.09', `HUD on. ${red(16)}`], ['d.??', 'it was on when I woke up.']];
+const LOG = [['day 1', 'Cut the case out of an old fuel drum lid and hammered it round.'], ['day 3', 'Gears from three different things. None of them were meant to fit together.'], ['day 4', 'Scraped half the board and redrew it with silver ink.'], ['day 6', 'First tick.'], ['day 9', `HUD works. ${red(14)}`], ['day 12', 'Switched it off and left it on the bench overnight. It was on in the morning.']];
 const SCHEM = `<svg class="schem" viewBox="0 0 300 160" role="img" aria-label="rough wiring sketch, unfinished">
 <g fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round">
 <rect x="14" y="62" width="54" height="30" rx="3"/><path d="M68 76c18-3 30 4 50-1"/>
@@ -144,7 +144,7 @@ const SCHEM = `<svg class="schem" viewBox="0 0 300 160" role="img" aria-label="r
 </svg>`;
 
 // ---------- renderer / scene
-try { await Promise.race([Promise.all(['500 40px Caveat', '700 40px Caveat', '40px "Share Tech Mono"'].map(f => document.fonts.load(f))), new Promise(r => setTimeout(r, 2500))]); } catch (e) { /* fall back to system fonts */ }
+try { await Promise.race([Promise.all(['700 40px "Chakra Petch"', '400 40px "IBM Plex Mono"', '500 40px "IBM Plex Mono"'].map(f => document.fonts.load(f))), new Promise(r => setTimeout(r, 2500))]); } catch (e) { /* fall back to system fonts */ }
 
 const stage = document.getElementById('stage');
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -225,9 +225,9 @@ const dialTex = tex(1024, 1024, (g, w) => {
   }
   const num = (s, ang, font, rot = 0) => { g.save(); g.translate(c + Math.sin(ang) * c * 0.64, c - Math.cos(ang) * c * 0.64); g.rotate(rot); g.font = font; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillStyle = '#231a10'; g.fillText(s, 0, 0); g.restore(); };
   num('3', Math.PI / 2, '600 120px Georgia, serif');
-  num('6', Math.PI, '700 150px Caveat, cursive', 0.12);
-  num('9', Math.PI * 1.5, '110px "Share Tech Mono", monospace', -0.05);
-  g.fillStyle = 'rgba(40,28,14,.55)'; g.font = '500 46px Caveat, cursive'; g.textAlign = 'center'; g.fillText('R.E.', c + 10, c + 215);
+  num('6', Math.PI, '700 140px "Chakra Petch", sans-serif', 0.12);
+  num('9', Math.PI * 1.5, '110px "IBM Plex Mono", monospace', -0.05);
+  g.fillStyle = 'rgba(40,28,14,.55)'; g.font = '500 34px "IBM Plex Mono", monospace'; g.textAlign = 'center'; g.fillText('R.E.', c + 10, c + 215);
   const x0 = c - 0.85 * c * 0.98, y0 = c + 0.49 * c * 0.98;
   g.strokeStyle = '#1b140b'; crack(g, x0, y0, Math.atan2(c - y0, c - x0), c * 0.55, 3);
   g.fillStyle = '#120d08'; g.beginPath(); g.arc(c, c, 18, 0, TAU); g.fill();
@@ -246,7 +246,7 @@ const boardTex = tex(256, 256, (g, w, h) => {
   g.fillStyle = '#56664f'; g.fillRect(w * 0.55, 0, w * 0.45, h); speckle(g, w, h, 1200, 0.15, 0.08);
   g.strokeStyle = '#d9dce0'; g.lineWidth = 2.6; g.lineCap = 'round';
   for (let i = 0; i < 8; i++) { let x = w * 0.55 + rnd(0, 20), y = rnd(10, h - 10); g.beginPath(); g.moveTo(x, y); while (x < w - 10) { x += rnd(8, 20); y += rnd(-10, 10); g.lineTo(x, y); } g.stroke(); }
-  g.fillStyle = '#e9e3c9'; g.font = '14px "Share Tech Mono", monospace'; g.fillText('REV ?', 8, h - 10);
+  g.fillStyle = '#e9e3c9'; g.font = '14px "IBM Plex Mono", monospace'; g.fillText('REV ?', 8, h - 10);
 });
 const backInTex = tex(512, 512, (g, w) => {
   g.fillStyle = '#a5a7a4'; g.fillRect(0, 0, w, w); speckle(g, w, w, 3000);
@@ -264,8 +264,8 @@ const backOutTex = tex(512, 512, (g, w) => {
   const c = w / 2; g.fillStyle = '#8f9295'; g.fillRect(0, 0, w, w);
   for (let r = 4; r < c; r += 1.5) { g.strokeStyle = `rgba(${rand() < 0.5 ? '0,0,0' : '255,255,255'},${rnd(0.02, 0.08)})`; g.beginPath(); g.arc(c, c, r, 0, TAU); g.stroke(); }
   g.fillStyle = 'rgba(30,30,30,.75)'; g.textAlign = 'center';
-  g.font = '700 54px Caveat, cursive'; g.fillText('U-01', c, c - 10);
-  g.font = '28px "Share Tech Mono", monospace'; g.fillText('DO NOT', c, c + 40);
+  g.font = '700 54px "Chakra Petch", sans-serif'; g.fillText('U-01', c, c - 10);
+  g.font = '28px "IBM Plex Mono", monospace'; g.fillText('DO NOT', c, c + 40);
 });
 const shadowTex = tex(256, 256, (g, w) => { const gr = g.createRadialGradient(w / 2, w / 2, 0, w / 2, w / 2, w / 2); gr.addColorStop(0, 'rgba(0,0,0,.6)'); gr.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = gr; g.fillRect(0, 0, w, w); });
 const ringTexA = tex(512, 512, (g, w) => {
@@ -273,7 +273,7 @@ const ringTexA = tex(512, 512, (g, w) => {
   [[0.15, 1.7], [2.05, 3.9], [4.3, 5.1], [5.35, 6.05]].forEach(([a, b]) => { g.beginPath(); g.arc(c, c, c * 0.95, a, b); g.stroke(); });
   for (let i = 0; i < 120; i++) { if (rand() < 0.12) continue; const a = i / 120 * TAU, big = i % 10 === 0, r0 = c * 0.9, r1 = r0 - (big ? 22 : 8); g.lineWidth = big ? 2.5 : 1.2; g.beginPath(); g.moveTo(c + Math.cos(a) * r0, c + Math.sin(a) * r0); g.lineTo(c + Math.cos(a) * r1, c + Math.sin(a) * r1); g.stroke(); }
   g.lineWidth = 1.2; g.setLineDash([5, 9]); g.beginPath(); g.arc(c, c, c * 0.7, 0, TAU); g.stroke(); g.setLineDash([]);
-  g.font = '18px "Share Tech Mono", monospace'; g.textAlign = 'center';
+  g.font = '18px "IBM Plex Mono", monospace'; g.textAlign = 'center';
   ['00', '15', '30', '??'].forEach((s, i) => { const a = i * Math.PI / 2 - Math.PI / 2; g.fillText(s, c + Math.cos(a) * c * 0.78, c + Math.sin(a) * c * 0.78 + 6); });
 });
 const ringTexB = tex(512, 512, (g, w) => {
@@ -506,7 +506,7 @@ function hudText() {
   const s = new THREE.Sprite(m); s.scale.set(1.5, 0.375, 1);
   s.userData.set = txt => {
     if (s.userData.txt === txt) return; s.userData.txt = txt;
-    g.clearRect(0, 0, 512, 128); g.font = '54px "Share Tech Mono", monospace'; g.fillStyle = '#ffcf3a'; g.shadowColor = '#ffae00'; g.shadowBlur = 14;
+    g.clearRect(0, 0, 512, 128); g.font = '54px "IBM Plex Mono", monospace'; g.fillStyle = '#ffcf3a'; g.shadowColor = '#ffae00'; g.shadowBlur = 14;
     g.fillText(txt, 16, 82); g.fillRect(16, 100, 60, 3); t.needsUpdate = true;
   };
   return s;
@@ -591,13 +591,12 @@ const state = { rotate: true, internals: false, separate: false, labels: true, h
 const row = (k, v) => v ? `<dt>${k}</dt><dd>${v}</dd>` : '';
 function blink() { info.classList.remove('blink'); void info.offsetWidth; info.classList.add('blink'); }
 function showOverview() {
-  const open = Object.values(INFO).filter(i => i.ask).length;
-  info.innerHTML = `<div class="code">UNIT 01 · INSPECTION COPY</div><h2>Wrist unit, yellow</h2>
-<dl>${row('builder', 'Rhada Evergarden')}${row('status', 'running <span class="dim">(mostly)</span>')}${row('parts', `17 catalogued · ${red(3)} not`)}${row('power', 'C-10 → C-11 → ? → C-13')}${row('open', `${open} questions`)}</dl>
-<p class="note">built from what was lying around. not all of it was lying around.</p>
-<h3>wiring, roughly</h3>${SCHEM}
+  info.innerHTML = `<div class="code">UNIT 01</div><h2>Yellow watch</h2>
+<dl>${row('built by', 'Rhada Evergarden')}${row('status', 'Runs. Loses a few seconds a day.')}${row('parts', `18 written down, ${red(2)} not`)}${row('power', 'Cell, then the board, then the emitter. The coil is in there too.')}</dl>
+<p class="note">Most of it came out of the scrap pile behind the shop. Took about two weeks.</p>
+<h3>wiring sketch (not finished)</h3>${SCHEM}
 <h3>log</h3><ol class="log">${LOG.map(([d, s]) => `<li><b>${d}</b>${s}</li>`).join('')}</ol>
-<p class="ask">anything that isn’t written here, ask Rhada Evergarden.</p>`;
+<p class="ask">If something isn’t written down here, just ask me. <span class="dim">R.</span></p>`;
   blink();
 }
 function showPart(k) {
@@ -605,7 +604,7 @@ function showPart(k) {
   info.innerHTML = `<div class="code">${i.code}</div><h2>${i.name}</h2>
 <dl>${row('material', i.mat)}${row('source', i.src)}${row('power', i.pwr)}${row('build', i.build)}</dl>
 ${i.note ? `<p class="note">${i.note}</p>` : ''}
-${i.ask ? `<p class="ask">${i.ask} <span class="dim">— ask Rhada Evergarden</span></p>` : ''}
+${i.ask ? `<p class="ask">${i.ask}</p>` : ''}
 <div class="act">${p.pull ? `<button data-pull="${k}">${pulled.has(k) ? 'put back' : 'pull out'}</button>` : ''}<button data-back>overview</button></div>`;
   blink();
 }
