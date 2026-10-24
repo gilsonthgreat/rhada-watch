@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Yellow Unit | Rhada Evergarden</title>
-<meta name="description" content="A watch Rhada Evergarden built out of scrap, with her bench notes.">
+<title>Scrap Watch HUD | Rhada Evergarden</title>
+<meta name="description" content="A watch HUD project Rhada Evergarden built out of scrap, with her bench notes.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
@@ -76,7 +76,7 @@ button:focus-visible{outline:2px solid var(--y);outline-offset:2px}
 <div id="stage"></div>
 <header>
   <div class="sig">Rhada Evergarden</div>
-  <h1>Yellow Unit</h1>
+  <h1>Scrap Watch HUD</h1>
   <p class="sub">bench notes, still working on them</p>
 </header>
 <aside id="panel" aria-live="polite"><div id="info"></div></aside>
@@ -264,7 +264,7 @@ const backOutTex = tex(512, 512, (g, w) => {
   const c = w / 2; g.fillStyle = '#8f9295'; g.fillRect(0, 0, w, w);
   for (let r = 4; r < c; r += 1.5) { g.strokeStyle = `rgba(${rand() < 0.5 ? '0,0,0' : '255,255,255'},${rnd(0.02, 0.08)})`; g.beginPath(); g.arc(c, c, r, 0, TAU); g.stroke(); }
   g.fillStyle = 'rgba(30,30,30,.75)'; g.textAlign = 'center';
-  g.font = '700 54px "Chakra Petch", sans-serif'; g.fillText('U-01', c, c - 10);
+  g.font = '700 54px "Chakra Petch", sans-serif'; g.fillText('HUD v0.3', c, c - 10);
   g.font = '28px "IBM Plex Mono", monospace'; g.fillText('DO NOT', c, c + 40);
 });
 const shadowTex = tex(256, 256, (g, w) => { const gr = g.createRadialGradient(w / 2, w / 2, 0, w / 2, w / 2, w / 2); gr.addColorStop(0, 'rgba(0,0,0,.6)'); gr.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = gr; g.fillRect(0, 0, w, w); });
@@ -591,7 +591,7 @@ const state = { rotate: true, internals: false, separate: false, labels: true, h
 const row = (k, v) => v ? `<dt>${k}</dt><dd>${v}</dd>` : '';
 function blink() { info.classList.remove('blink'); void info.offsetWidth; info.classList.add('blink'); }
 function showOverview() {
-  info.innerHTML = `<div class="code">UNIT 01</div><h2>Yellow watch</h2>
+  info.innerHTML = `<div class="code">HUD PROJECT</div><h2>Scrap watch</h2>
 <dl>${row('built by', 'Rhada Evergarden')}${row('status', 'Runs. Loses a few seconds a day.')}${row('parts', `18 written down, ${red(2)} not`)}${row('power', 'Cell, then the board, then the emitter. The coil is in there too.')}</dl>
 <p class="note">Most of it came out of the scrap pile behind the shop. Took about two weeks.</p>
 <h3>wiring sketch (not finished)</h3>${SCHEM}
